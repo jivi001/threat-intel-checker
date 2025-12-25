@@ -1,11 +1,13 @@
 import os
 
 
-ABUSEIPDB_BASE_URL = "https://api.abuseipdb.com/api/v2/"
+# Base API URL (no trailing slash)
+ABUSEIPDB_BASE_URL = "https://api.abuseipdb.com/api/v2"
 ABUSEIPDB_CHECK_ENDPOINT = f"{ABUSEIPDB_BASE_URL}/check"
 
 
-MAX_AGE_DAY = int(os.getenv("MAX_AGE_DAY", 60))
+# Number of days to look back when querying AbuseIPDB
+MAX_AGE_DAYS = int(os.getenv("MAX_AGE_DAYS", 60))
 
 
 HIGH_RISK_THRESHOLD = int(os.getenv("HIGH_RISK_THRESHOLD", "80"))

@@ -2,8 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from config import (ABUSEIPDB_CHECK_ENDPOINT, 
-                    MAX_AGE_DAYS)
+from config import ABUSEIPDB_CHECK_ENDPOINT, MAX_AGE_DAYS
 
 load_dotenv()
 
@@ -16,6 +15,7 @@ SESSION.headers.update({
     "Key": API_KEY,
     "Accept": "application/json",
 })
+
 
 def check_ip(ip_address: str, max_age_days: int | None = None) -> dict:
     params = {
@@ -30,6 +30,7 @@ def check_ip(ip_address: str, max_age_days: int | None = None) -> dict:
 
     # AbuseIPDB puts the useful info inside the 'data' key.
     return payload.get("data", {})
+
 
 def simple_verdict(ip_data: dict) -> str:
     score = ip_data.get("abuseConfidenceScore", 0)
