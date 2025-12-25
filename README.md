@@ -1,8 +1,8 @@
-# Threat Intel Checker
+# Threat Intel Checker![License](https://img.shields.io/badge/license-MIT-green)
 
 Threat Intel Checker is a Python-based threat intelligence enrichment tool that detects malicious IP addresses in web server logs using curated abuse data from **AbuseIPDB**.
 It supports fast offline lookups via a local SQLite database with optional live intelligence checks for up-to-date threat context.
-![License](https://img.shields.io/badge/license-MIT-green)
+
 
 Designed for SOC workflows, blue-team operations, and cybersecurity research.
 
