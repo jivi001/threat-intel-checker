@@ -1,192 +1,226 @@
-🛡️ Threat Intel Checker
+# Threat Intel Checker
 
-Threat Intel Checker is a Python-based threat intelligence enrichment engine that scans web server logs and IP addresses against high-confidence abuse data from AbuseIPDB.
-It enables real-time attacker detection, offline IOC lookups, and SOC-ready reporting using a high-performance local SQLite database.
+Threat Intel Checker is a Python-based threat intelligence enrichment tool that detects malicious IP addresses in web server logs using curated abuse data from **AbuseIPDB**.
+It supports fast offline lookups via a local SQLite database with optional live intelligence checks for up-to-date threat context.
 
-Built for cybersecurity analysts, blue-team engineers, and security students.
+Designed for SOC workflows, blue-team operations, and cybersecurity research.
 
-🎯 Key Capabilities
+---
 
-🔍 Live Threat Intelligence Enrichment via AbuseIPDB API
+## Features
 
-💾 Local SQLite IOC Cache for ultra-fast offline lookups
+* Threat intelligence enrichment using AbuseIPDB
+* High-speed local SQLite IOC database
+* Apache, Nginx, and Common Log Format parsing
+* Real-time detection of high-risk IP addresses
+* CSV and JSON report generation
+* Offline-first design with optional live API checks
+* Cross-platform support (Linux, Windows, macOS)
 
-📊 Apache / Nginx / Common Log Format Parsing
+---
 
-🚨 Real-Time Threat Detection & Alerts
+## Use Cases
 
-📈 CSV & JSON Reports (SOC-friendly)
+* Security Operations Center (SOC) log analysis
+* Incident response and alert enrichment
+* Threat hunting and investigation
+* Honeypot and lab log analysis
+* Cybersecurity academic and portfolio projects
 
-🖥️ Cross-Platform (Linux, Windows, macOS)
+---
 
-⚡ Low API Usage with intelligent caching
+## Sample Output
 
-🧠 Use Cases
+```text
+Threat Intel Log Scanner
+-----------------------
+IOC Database:
+  Total indicators : 12,543
+  High-risk IPs    : 892
 
-SOC log monitoring & triage
+[ALERT] Malicious IP detected
+IP Address : 45.146.166.149
+Risk Score : 95
+Country    : RU
+Verdict    : HIGH RISK (BLOCK)
 
-Blue-team threat hunting
+Report saved to:
+./reports/log_scan_hits_20251225_155200.csv
+```
 
-Incident response enrichment
+---
 
-Honeypot & lab analysis
+## Requirements
 
-Cybersecurity academic projects
+* Python 3.8 or later
+* Free AbuseIPDB API key
 
-Lightweight threat-intel automation
+---
 
-🖥️ Sample Output
-🛡️  Threat Intel Log Scanner
-DB stats: {'total': 12543, 'high_risk': 892}
-🔴 HIT: 45.146.166.149 (score=95, country=RU)
-🚨 Found 1 high-risk IPs!
-💾 Saved to ./reports/log_scan_hits_20251225_155200.csv
+## Installation
 
-🚀 Installation & Usage
-Prerequisites
+### Clone Repository
 
-Python 3.8+
-
-Free AbuseIPDB API Key
-
-Step 1: Clone & Environment Setup
-Linux / macOS
+```bash
 git clone https://github.com/jivi001/threat-intel-checker
 cd threat-intel-checker
+```
+
+### Virtual Environment Setup
+
+#### Linux / macOS
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
-Windows (PowerShell)
-git clone https://github.com/jivi001/threat-intel-checker
-cd threat-intel-checker
+#### Windows
+
+```cmd
 python -m venv venv
-venv\Scripts\Activate.ps1
+venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-Windows (Command Prompt)
-git clone https://github.com/jivi001/threat-intel-checker
-cd threat-intel-checker
-python -m venv venv
-venv\Scripts\activate.bat
-pip install -r requirements.txt
+---
 
-Step 2: Configure API Key
-# Get your key from https://www.abuseipdb.com/dashboard/api
-echo "ABUSEIPDB_API_KEY=your_actual_key_here" > .env
+## Configuration
 
+Create a `.env` file in the project root:
 
-🔐 .env is git-ignored. API keys are never committed.
+```env
+ABUSEIPDB_API_KEY=your_api_key_here
+```
 
-Step 3: Initialize Local Database
-mkdir -p data logs reports      # Linux/macOS
-mkdir data logs reports         # Windows
+> The `.env` file is excluded from version control.
 
+---
+
+## Initialization
+
+```bash
+mkdir data logs reports
 python -c "from iocstore import init_db; init_db()"
+```
 
-Step 4: Full Demo
-# Download threat intelligence (12k+ IOCs)
+---
+
+## Usage
+
+### Download Threat Indicators
+
+```bash
 python fetch_iocs.py
+```
 
-# Check a single IP (local DB)
+### Check a Single IP (Offline)
+
+```bash
 python check_ip.py 8.8.8.8
+```
 
-# Live API check (rate-limited)
+### Live Threat Intelligence Lookup
+
+```bash
 python check_ip.py 8.8.8.8 --live
+```
 
-# Create sample log & scan
-echo '45.146.166.149 - - [$(date)] "GET /" 200' > logs/access.log
+### Scan Web Server Logs
+
+```bash
 python log_scanner.py
+```
 
-🛠️ Command Reference
-Command	Description
-python fetch_iocs.py	Download threat IOCs
-python log_scanner.py	Scan logs for malicious IPs
-python check_ip.py <IP>	Local DB lookup
-python check_ip.py <IP> --live	Live AbuseIPDB check
-📁 Project Structure
+---
+
+## Command Reference
+
+| Command                   | Description                           |
+| ------------------------- | ------------------------------------- |
+| `fetch_iocs.py`           | Download and update threat indicators |
+| `log_scanner.py`          | Scan logs for malicious IPs           |
+| `check_ip.py <IP>`        | Offline IOC database lookup           |
+| `check_ip.py <IP> --live` | Live AbuseIPDB lookup                 |
+
+---
+
+## Project Structure
+
+```text
 threat-intel-checker/
-├── config.py          # Configuration
-├── abuseipdb.py       # AbuseIPDB API client
-├── iocstore.py        # SQLite IOC storage engine
-├── fetch_iocs.py      # IOC downloader
-├── log_scanner.py     # Log analysis engine
-├── check_ip.py        # CLI IP checker
-├── data/iocs.db       # Local threat database
-├── logs/access.log    # Sample logs
-├── reports/           # CSV / JSON outputs
-├── requirements.txt   # Dependencies
-└── .env               # API key (ignored)
+├── abuseipdb.py        # Threat intelligence client
+├── iocstore.py         # SQLite IOC storage engine
+├── fetch_iocs.py       # IOC downloader
+├── log_scanner.py      # Log analysis engine
+├── check_ip.py         # CLI interface
+├── config.py           # Configuration
+├── data/
+│   └── iocs.db         # Local threat database
+├── logs/
+│   └── access.log      # Sample log file
+├── reports/            # Generated reports
+├── requirements.txt
+└── .env                # API key (ignored)
+```
 
-📊 Outputs Generated
+---
 
-data/iocs.db → Local threat database
+## Risk Scoring Model
 
-reports/abuseipdb_iocs_*.csv → Raw IOC feeds
+| Score Range | Classification | Recommended Action |
+| ----------- | -------------- | ------------------ |
+| 0–29        | Low Risk       | Allow              |
+| 30–79       | Suspicious     | Monitor            |
+| 80–100      | High Risk      | Block              |
 
-reports/log_scan_hits_*.csv → Detected attacks
+---
 
-reports/check_*.json → Detailed IP intelligence
+## Automation (Production Use)
 
-🛡️ Risk Scoring Model
-Score	Verdict	Recommended Action
-0–29	LOW RISK	Allow
-30–79	SUSPICIOUS	Monitor
-80–100	HIGH RISK	Block
-🔄 Production Deployment
-Linux / macOS (Cron)
-# Daily IOC refresh (09:00)
-0 9 * * * cd /path/to/project && source venv/bin/activate && python fetch_iocs.py
+### Linux / macOS (Cron)
+
+```bash
+# Daily IOC refresh
+0 9 * * * python fetch_iocs.py
 
 # Hourly log scan
-0 * * * * cd /path/to/project && source venv/bin/activate && python log_scanner.py
+0 * * * * python log_scanner.py
+```
 
-Windows (Task Scheduler)
+### Windows (Task Scheduler)
 
-Program: venv\Scripts\python.exe
+* Program: `venv\Scripts\python.exe`
+* Arguments: `log_scanner.py`
+* Trigger: Hourly or daily
 
-Argument: log_scanner.py
+---
 
-Trigger: Hourly / Daily
+## Security Notes
 
-🔐 Security Notes
+* API keys stored securely using environment variables
+* No outbound network traffic unless live mode is enabled
+* Local SQLite database only (no external exposure)
+* Suitable for offline and restricted environments
 
-API keys stored securely using .env
+---
 
-No outbound traffic unless --live is used
+## License
 
-Offline mode works without internet access
+MIT License. See the `LICENSE` file for details.
 
-SQLite database is local-only
+---
 
-🤝 Contributing
+## Acknowledgments
 
-Fork the repository
+Threat intelligence data provided by AbuseIPDB.
 
-Create a feature branch
+---
 
-git checkout -b feature/your-feature
+## One-Line Demo
 
+```bash
+python fetch_iocs.py && echo '45.146.166.149 - - [GET / HTTP/1.1] 200' > logs/access.log && python log_scanner.py
+```
 
-Commit changes
-
-git commit -m "Add feature"
-
-
-Push & open a Pull Request
-
-📄 License
-
-MIT License — see LICENSE file.
-
-🙏 Acknowledgments
-
-AbuseIPDB for open threat intelligence
-
-Built with ❤️ for cybersecurity analysts
-
-⚡ One-Line Demo
-python fetch_iocs.py && echo '45.146.166.149 - - [$(date)] "GET /" 200' > logs/access.log && python log_scanner.py
-
-⭐ If this project helps your threat hunting, consider starring the repo
-🐛 Found an issue? Open a GitHub ticket
