@@ -8,3 +8,6 @@ logs/
 *.log
 *.sqlite
 *.sqlite3
+/data/
+/reports/
+/logs/
