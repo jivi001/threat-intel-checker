@@ -143,4 +143,3 @@ python src/log_scanner.py
 
 ## License
 MIT — see [LICENSE](LICENSE)
-
