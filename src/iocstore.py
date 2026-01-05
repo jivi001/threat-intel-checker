@@ -1,6 +1,7 @@
 import sqlite3
 import csv
 import os
+from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime
 
@@ -9,7 +10,9 @@ from config import IOC_DB_PATH, HIGH_RISK_THRESHOLD
 DB_PATH = IOC_DB_PATH
 
 def init_db():
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    # Create directory with cross-platform support
+    db_path = Path(DB_PATH)
+    db_path.parent.mkdir(parents=True, exist_ok=True)
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -28,6 +31,7 @@ def init_db():
     
     conn.commit()
     conn.close()
+    print(f"Database initialized at: {DB_PATH}")
 
 def load_from_csv(csv_path: str) -> List[Dict]:
     iocs = []

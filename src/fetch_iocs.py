@@ -5,7 +5,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from config import (
-    ABUSEIPDB_BASE_URL,
+    ABUSEIPDB_API_URL,
     MAX_AGE_DAYS,
     HIGH_RISK_THRESHOLD,
     REPORTS_DIR,
@@ -26,7 +26,7 @@ SESSION.headers.update({
 
 def fetch_blacklist():
     """Fetch high-confidence blacklist from AbuseIPDB."""
-    url = f"{ABUSEIPDB_BASE_URL}/blacklist"
+    url = f"{ABUSEIPDB_API_URL}/blacklist"
     params = {
         "confidenceMinimum": HIGH_RISK_THRESHOLD,
         "limit": 10000,

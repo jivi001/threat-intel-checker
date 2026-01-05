@@ -2,7 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from config import ABUSEIPDB_CHECK_ENDPOINT, MAX_AGE_DAYS
+from config import ABUSEIPDB_API_URL, MAX_AGE_DAYS
 
 load_dotenv()
 
@@ -24,7 +24,7 @@ def check_ip(ip_address: str, max_age_days: int | None = None) -> dict:
         "verbose": True,
     }
 
-    resp = SESSION.get(ABUSEIPDB_CHECK_ENDPOINT, params=params, timeout=15)
+    resp = SESSION.get(ABUSEIPDB_API_URL, params=params, timeout=15)
     resp.raise_for_status()
     payload = resp.json()
 

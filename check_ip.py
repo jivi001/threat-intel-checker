@@ -1,8 +1,3 @@
-"""
-Simple CLI tool to check any IP's reputation via AbuseIPDB.
-Usage: python3 check_ip.py 8.8.8.8
-"""
-
 import sys
 import argparse
 from datetime import datetime
